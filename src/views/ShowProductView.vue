@@ -15,7 +15,7 @@ const slideTo = (val) => {
 
 <template>
   <Layout>
-    <section class="px-2 md:px-0">
+    <section>
       <div class="w-full flex flex-col md:flex-row md:space-x-8">
         <div class="md:w-[45%]">
           <Carousel
@@ -131,6 +131,13 @@ const slideTo = (val) => {
                     Wishlist
                   </button>
                 </div>
+              </div>
+              <div>
+                <button
+                  class="text-white bg-danger hover:bg-white hover:text-danger border border-transparent hover:border-danger focus:outline-none font-medium rounded-lg text-base px-5 py-2.5 text-center inline-flex items-center mr-2"
+                >
+                  Buy Now
+                </button>
               </div>
             </div>
           </div>

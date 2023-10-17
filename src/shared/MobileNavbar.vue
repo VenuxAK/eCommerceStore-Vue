@@ -63,7 +63,7 @@
                   </button>
                 </div>
                 <div>
-                  <button class="route-btn" @click="changeRoute('#')">
+                  <button class="route-btn" @click="changeRoute('contact')">
                     Contact
                   </button>
                 </div>

@@ -1,4 +1,6 @@
 <script setup>
+import { RouterLink } from "vue-router";
+
 const date = new Date();
 </script>
 
@@ -19,25 +21,25 @@ const date = new Date();
         <div
           class="flex flex-wrap sm:gap-10 gap-8 items-center justify-center mt-8"
         >
-          <a
-            href="javascript:void(0)"
+          <RouterLink
+            to="/about"
             class="focus:underline focus:outline-none hover:text-gray-500 text-base cursor-pointer leading-4 text-gray-800 dark:text-gray-400 dark:hover:text-white"
-            >About</a
+            >About</RouterLink
           >
           <a
             href="javascript:void(0)"
             class="focus:underline focus:outline-none hover:text-gray-500 text-base cursor-pointer leading-4 text-gray-800 dark:text-gray-400 dark:hover:text-white"
             >Contact us</a
           >
-          <a
+          <!-- <a
             href="javascript:void(0)"
             class="focus:underline focus:outline-none hover:text-gray-500 text-base cursor-pointer leading-4 text-gray-800 dark:text-gray-400 dark:hover:text-white"
             >Terms of Service</a
-          >
-          <a
-            href="javascript:void(0)"
+          > -->
+          <RouterLink
+            to="/privacy-policy"
             class="focus:underline focus:outline-none hover:text-gray-500 text-base cursor-pointer leading-4 text-gray-800 dark:text-gray-400 dark:hover:text-white"
-            >Privacy Policy</a
+            >Privacy Policy</RouterLink
           >
           <a
             href="javascript:void(0)"

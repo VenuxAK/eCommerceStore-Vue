@@ -1,8 +1,8 @@
 <script setup>
 import { RouterLink } from "vue-router";
-import ShoppingCart from "../components/ShoppingCart.vue";
-import SearchBox from "../components/SearchBox.vue";
-import MobileNavbar from "../components/MobileNavbar.vue";
+import ShoppingCart from "../components/shop/ShoppingCart.vue";
+import SearchBox from "../components/modals/SearchBox.vue";
+import MobileNavbar from "./MobileNavbar.vue";
 import { ref } from "vue";
 
 import {
@@ -59,7 +59,7 @@ const isOpenSearchBox = ref(false);
         </li>
         <li>
           <RouterLink
-            to="#"
+            to="/contact"
             class="nav-link"
             :class="{ active: $route.name == 'contact' }"
             >Contact</RouterLink
@@ -83,8 +83,8 @@ const isOpenSearchBox = ref(false);
           <HeartIcon class="h-5 w-5" />
         </button>
       </li>
-      <li class="nav-icon">
-        <button @click="open = true">
+      <li class="nav-icon" @click="open = true">
+        <button>
           <ShoppingBagIcon class="h-5 w-5" />
         </button>
         <div

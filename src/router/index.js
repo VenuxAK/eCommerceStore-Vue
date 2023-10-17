@@ -32,6 +32,16 @@ const router = createRouter({
       name: "about",
       component: () => import("../views/AboutView.vue"),
     },
+    {
+      path: "/contact",
+      name: "contact",
+      component: () => import("../views/ContactView.vue"),
+    },
+    {
+      path: "/privacy-policy",
+      name: "privacy-policy",
+      component: () => import("../views/PrivacyAndPolicy.vue"),
+    },
   ],
   scrollBehavior(to, from, savedPosition) {
     // always scroll to top

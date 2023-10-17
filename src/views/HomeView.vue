@@ -1,4 +1,5 @@
 <script setup>
+import Features from "../components/Features.vue";
 import Layout from "../layouts/Layout.vue";
 import RecommandedProducts from "./home/RecommandedProducts.vue";
 import TopNewArrival from "./home/TopNewArrival.vue";
@@ -6,6 +7,9 @@ import TopNewArrival from "./home/TopNewArrival.vue";
 
 <template>
   <Layout>
+    <div>
+      <Features />
+    </div>
     <section class="container">
       <h1 class="title">Shop By Category</h1>
       <div class="grid grid-cols-3 gap-1 my-5">
@@ -24,7 +28,7 @@ import TopNewArrival from "./home/TopNewArrival.vue";
       </div>
     </section>
     <TopNewArrival />
-    <section class="container overflow-hidden mb-8">
+    <!-- <section class="container mb-8">
       <div class="border shadow-lg">
         <img
           src="/images/banner/ecommerce-banner-4.jpg"
@@ -32,7 +36,7 @@ import TopNewArrival from "./home/TopNewArrival.vue";
           class="w-full h-full object-fill"
         />
       </div>
-    </section>
+    </section> -->
     <RecommandedProducts />
     <section class="my-12">
       <div>

@@ -4,11 +4,9 @@ import FilterCategory from "./FilterCategory.vue";
 
 <template>
   <aside class="md:basis-72 overflow-x-hidden">
-    <div
-      class="w-full flex md:flex-col justify-between border-l border-gray-200"
-    >
+    <div class="w-full flex flex-col justify-between">
       <FilterCategory />
-      <div class="md:border-b border-gray-200">
+      <div class="w-[150px] md:w-[200px] overflow-hidden">
         <div>
           <h1 class="sub-title pl-3">Price</h1>
         </div>

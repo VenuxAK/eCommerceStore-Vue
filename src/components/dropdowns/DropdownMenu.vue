@@ -16,7 +16,7 @@ const toggleShow = () => {
       class="flex items-center justify-between mb-2 cursor-pointer"
       @click="toggleShow"
     >
-      <p class="text-secondary font-bold">{{ title }}</p>
+      <p class="text-gray-600 font-medium">{{ title }}</p>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"

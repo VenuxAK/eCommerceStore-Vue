@@ -1,7 +1,7 @@
 <script setup>
 import { Carousel, Navigation, Slide } from "vue3-carousel";
 import "vue3-carousel/dist/carousel.css";
-import Product from "../../components/Product.vue";
+import Product from "../../components/products/Product.vue";
 const settings = {
   itemsToShow: 1,
   snapAlign: "center",

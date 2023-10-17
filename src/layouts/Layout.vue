@@ -5,7 +5,7 @@ import Footer from "../shared/Footer.vue";
 
 <template>
   <Header />
-  <main class="container my-12">
+  <main class="container my-12 animate__animated animate__fadeIn">
     <slot />
   </main>
   <Footer />

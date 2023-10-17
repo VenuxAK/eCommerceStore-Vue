@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import DropdownMenu from "../../components/DropdownMenu.vue";
+import DropdownMenu from "../../components/dropdowns/DropdownMenu.vue";
 
 let categories = ref([
   {
@@ -59,18 +59,14 @@ let openMenu = ref(false);
 </script>
 
 <template>
-  <div class="border-r md:border-r-0 md:border-b border-gray-200">
+  <div class="w-full">
     <div>
       <h1 class="sub-title pl-3">Category</h1>
     </div>
-    <ul
-      class="w-48 text-sm font-medium text-gray-900 bg-white dark:bg-gray-700 dark:text-white pl-3"
-    >
+    <ul class="md:w-48 text-sm font-medium pl-3">
       <li class="w-full" v-for="category in categories" :key="category.id">
         <DropdownMenu :title="category.name" height="h-auto">
-          <ul
-            class="w-full text-sm font-medium text-gray-900 bg-white dark:bg-gray-700 dark:text-white pl-3"
-          >
+          <ul class="w-full text-sm font-medium text-gray-900 pl-1.5">
             <li class="w-full" v-for="p_type in product_types" :key="p_type">
               <div class="flex items-center justify-between">
                 <div class="flex items-center">
