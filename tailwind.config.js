@@ -1,10 +1,12 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts}",
     "./node_modules/flowbite/**/*.js",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
@@ -15,6 +17,9 @@ module.exports = {
         danger: "crimson", // "#EF837B"
         warning: "#FACC15",
         secondary: "#3a3a3b",
+      },
+      fontFamily: {
+        sans: ["Inter var", ...defaultTheme.fontFamily.sans],
       },
       container: {
         center: true,

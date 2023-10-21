@@ -1,4 +1,5 @@
 import "./assets/css/main.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import FsLightbox from "fslightbox-vue/v3";
 import "vue3-carousel/dist/carousel.css";
 import "animate.css";

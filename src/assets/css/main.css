@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply w-screen overflow-x-hidden;
+  @apply w-screen overflow-x-hidden bg-white dark:bg-gray-950;
 }
 
 .btn-primary-outline {
