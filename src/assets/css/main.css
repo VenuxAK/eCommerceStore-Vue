@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply w-screen overflow-x-hidden;
+}
+
+.btn-primary-outline {
+  @apply bg-primary px-3 py-1 text-white rounded hover:bg-white hover:text-primary font-medium transition-all border-2 border-transparent hover:border-primary;
+}
+.btn-secondary-outline {
+  @apply bg-secondary px-3 py-1 text-white rounded hover:bg-white hover:text-secondary font-medium transition-all border-2 border-transparent hover:border-secondary;
+}
+.btn-danger-outline {
+  @apply bg-danger px-3 py-1 text-white rounded hover:bg-white hover:text-danger font-medium transition-all border-2 border-transparent hover:border-danger;
+}
+.btn-info-outline {
+  @apply bg-info px-3 py-1 text-white rounded hover:bg-white hover:text-info font-medium transition-all border-2 border-transparent hover:border-info;
+}
+.btn-warning-outline {
+  @apply bg-warning px-3 py-1 text-white rounded hover:bg-white hover:text-warning font-medium transition-all border-2 border-transparent hover:border-warning;
+}
+.btn-dark-outline {
+  @apply bg-dark px-3 py-1 text-white rounded hover:bg-white hover:text-dark font-medium transition-all border-2 border-transparent hover:border-dark;
+}
+
+/* .btn- */
+
+.title {
+  @apply text-xl md:text-2xl text-secondary font-medium uppercase;
+}
+.sub-title {
+  @apply text-lg md:text-xl text-secondary font-medium uppercase;
+}
