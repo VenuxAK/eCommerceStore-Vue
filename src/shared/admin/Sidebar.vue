@@ -1,21 +1,24 @@
 <script setup>
 import { onMounted, ref } from "vue";
 
-let is_expanded = ref(true);
+const emit = defineEmits(["sidebar_expanded"]);
+const props = defineProps(["is_expanded", "screen_sm"]);
+
+// let is_expanded = ref(true);
 let openProductsDropdown = ref(false);
 let openOrdersDropdown = ref(false);
 let openCustomersDropdown = ref(false);
 
 const toggleSidebar = () => {
-  is_expanded.value = !is_expanded.value;
+  emit("sidebar_expanded");
+  // is_expanded.value = !is_expanded.value;
   openProductsDropdown.value = false;
   openOrdersDropdown.value = false;
   openCustomersDropdown.value = false;
-  localStorage.setItem("is_expanded", is_expanded.value);
 };
 
 const toggleDrowdown = (name) => {
-  is_expanded.value = true;
+  emit("sidebar_expanded", true);
   if (name === "products") {
     openProductsDropdown.value = !openProductsDropdown.value;
   } else if (name === "orders") {
@@ -25,18 +28,21 @@ const toggleDrowdown = (name) => {
   }
 };
 
-onMounted(() => {
-  if (screen.width > 768) {
-    is_expanded.value = localStorage.getItem("is_expanded") == "true";
-  } else {
-    is_expanded.value = false;
-  }
-});
+if (props.is_expanded) {
+  openProductsDropdown.value = false;
+  openOrdersDropdown.value = false;
+  openCustomersDropdown.value = false;
+}
 </script>
 
 <template>
+  <div
+    class="overlay"
+    v-if="screen_sm && is_expanded"
+    @click="toggleSidebar()"
+  />
   <aside :class="is_expanded ? 'expand' : ''">
-    <div class="relative w-full border-b dark:border-b-gray-800 h-16 mb-4">
+    <div class="sidebar-header">
       <div class="icon-wrapper">
         <div>
           <RouterLink to="/admin">
@@ -226,18 +232,26 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+.overlay {
+  @apply fixed top-0 z-[100] left-0 w-screen h-screen overflow-hidden bg-black bg-opacity-60;
+}
 aside {
   @apply w-[3.5rem] h-screen flex flex-col items-start
-          sticky top-0 overflow-x-hidden overflow-y-auto
-          border-r dark:border-r-gray-800  shadow bg-white dark:bg-slate-900 z-50 duration-200;
-  .icon-wrapper {
-    @apply hidden;
-  }
-  .toggler {
-    @apply absolute top-4 right-5;
-    button {
-      i {
-        @apply -rotate-180;
+          fixed top-0 overflow-x-hidden overflow-y-auto
+          border-r dark:border-r-gray-800  shadow bg-white dark:bg-slate-900 z-[1000] duration-200;
+
+  .sidebar-header {
+    @apply relative  w-full border-b dark:border-b-gray-800 h-16 mb-4;
+    .icon-wrapper {
+      @apply hidden;
+    }
+    .toggler {
+      @apply w-full h-full py-8 flex items-center justify-center;
+      button {
+        @apply hover:translate-x-1 duration-200;
+        i {
+          @apply -rotate-180;
+        }
       }
     }
   }
@@ -251,14 +265,14 @@ aside {
       }
       a,
       button {
-        @apply block md:hover:bg-gray-200 md:hover:text-gray-600 dark:hover:bg-gray-600 dark:md:hover:text-gray-100 px-3.5 py-2 rounded;
+        @apply block hover:bg-gray-200 hover:text-gray-600 dark:hover:bg-gray-600 dark:hover:text-gray-100 px-3.5 py-2 rounded;
         span {
           @apply flex items-center;
           .link-icon {
             @apply mr-3;
           }
           .link-text {
-            @apply opacity-0;
+            @apply opacity-0 duration-200;
           }
         }
       }
@@ -298,12 +312,17 @@ aside {
   &.expand {
     @apply w-[280px];
 
+    .sidebar-header {
+      @apply flex justify-between items-center;
+    }
     .icon-wrapper {
       @apply flex items-center pt-3 pl-3;
     }
 
     .toggler {
+      @apply pr-2 w-auto h-auto;
       button {
+        @apply hover:-translate-x-1;
         i {
           @apply rotate-0;
         }
@@ -315,7 +334,7 @@ aside {
         a,
         button {
           .link-text {
-            @apply opacity-100;
+            @apply opacity-100 duration-200;
           }
         }
         .mini-badge {
@@ -331,8 +350,8 @@ aside {
     }
   }
 
-  @media screen and (max-width: 768px) {
-    @apply fixed;
-  }
+  // @media screen and (max-width: 768px) {
+  //   @apply fixed;
+  // }
 }
 </style>

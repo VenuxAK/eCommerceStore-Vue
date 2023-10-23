@@ -3,9 +3,11 @@
 @tailwind utilities;
 
 body {
-  @apply w-screen overflow-x-hidden bg-white dark:bg-gray-950;
+  @apply  bg-white dark:bg-gray-950 text-gray-800 dark:text-gray-400;
 }
-
+.admin-container {
+  @apply w-[95%] mx-auto;
+}
 .btn-primary-outline {
   @apply bg-primary px-3 py-1 text-white rounded hover:bg-white hover:text-primary font-medium transition-all border-2 border-transparent hover:border-primary;
 }

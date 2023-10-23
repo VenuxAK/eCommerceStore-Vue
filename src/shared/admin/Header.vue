@@ -140,11 +140,7 @@ window.addEventListener("keydown", (e) => {
                   >minnarkar@gmail.com</span
                 >
               </h4>
-              <RouterLink
-                to="/admin"
-                class="modal-item"
-                role="menuitem"
-              >
+              <RouterLink to="/admin" class="modal-item" role="menuitem">
                 Dashboard
               </RouterLink>
 
@@ -160,7 +156,11 @@ window.addEventListener("keydown", (e) => {
                 Earnings
               </RouterLink>
 
-              <button to="/admin/logout" class="modal-item text-start" role="menuitem">
+              <button
+                to="/admin/logout"
+                class="modal-item text-start"
+                role="menuitem"
+              >
                 Sign out
               </button>
             </div>
@@ -173,7 +173,7 @@ window.addEventListener("keydown", (e) => {
 
 <style lang="scss" scoped>
 .header {
-  @apply pl-10 md:pl-5 pr-2 w-full h-16 border-b dark:border-b-0 dark:shadow-lg shadow-sm bg-white dark:bg-slate-900 sticky top-0 z-40;
+  @apply pl-5 pr-2 w-full h-16 border-b dark:border-b-0 dark:shadow-lg shadow-sm bg-white dark:bg-slate-900 sticky top-0 z-40;
   .mini-badge {
     @apply absolute top-0 -right-[2px] w-[7px] h-[7px] rounded-full bg-danger;
   }
