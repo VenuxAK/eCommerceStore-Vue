@@ -1,38 +1,61 @@
 <script setup></script>
 
 <template>
-  <nav class="flex justify-center items-center space-x-2 my-4">
-    <RouterLink
-      class="text-gray-500 hover:text-blue-600 p-4 inline-flex items-center gap-2 rounded-md"
-      to="#"
-    >
-      <span aria-hidden="true">«</span>
-      <span class="sr-only">Previous</span>
-    </RouterLink>
-    <RouterLink
-      class="w-10 h-10 bg-blue-500 text-white p-4 inline-flex items-center text-sm font-medium rounded-full"
-      to="#"
-      aria-current="page"
-      >1</RouterLink
-    >
-    <RouterLink
-      class="w-10 h-10 text-gray-500 hover:text-blue-600 p-4 inline-flex items-center text-sm font-medium rounded-full"
-      to="#"
-      >2</RouterLink
-    >
-    <RouterLink
-      class="w-10 h-10 text-gray-500 hover:text-blue-600 p-4 inline-flex items-center text-sm font-medium rounded-full"
-      to="#"
-      >3</RouterLink
-    >
-    <RouterLink
-      class="text-gray-500 hover:text-blue-600 p-4 inline-flex items-center gap-2 rounded-md"
-      to="#"
-    >
-      <span class="sr-only">Next</span>
-      <span aria-hidden="true">»</span>
-    </RouterLink>
-  </nav>
+  <div class="flex flex-col items-end">
+    <!-- Help text -->
+    <span class="text-sm text-gray-700 dark:text-gray-400">
+      Showing
+      <span class="font-semibold text-gray-900 dark:text-white">1</span>
+      to
+      <span class="font-semibold text-gray-900 dark:text-white">10</span>
+      of
+      <span class="font-semibold text-gray-900 dark:text-white">100</span>
+      Entries
+    </span>
+    <div class="inline-flex mt-2 xs:mt-0">
+      <!-- Buttons -->
+      <button
+        class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+      >
+        <svg
+          class="w-3.5 h-3.5 mr-2"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 14 10"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 5H1m0 0 4 4M1 5l4-4"
+          />
+        </svg>
+        Prev
+      </button>
+      <button
+        class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+      >
+        Next
+        <svg
+          class="w-3.5 h-3.5 ml-2"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 14 10"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M1 5h12m0 0L9 1m4 4L9 9"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped></style>

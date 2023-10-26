@@ -4,6 +4,11 @@ import ShopView from "../views/ShopView.vue";
 import ShoppingBagView from "../views/ShoppingBagView.vue";
 import ShowProductView from "../views/ShowProductView.vue";
 import DashboardView from "../views/admin/DashboardView.vue";
+import ProductList from "../views/admin/products/ProductListView.vue";
+import { default as AdminShowProductView } from "../views/admin/products/ShowProductView.vue";
+import CreateProduct from "../views/admin/products/CreateProductView.vue";
+import EditProduct from "../views/admin/products/EditProductView.vue";
+import CategoriesView from "../views/admin/categories/CategoriesView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,17 +41,27 @@ const router = createRouter({
     {
       path: "/admin/products",
       name: "products",
-      component: DashboardView,
+      component: ProductList,
+    },
+    {
+      path: "/admin/products/:slug/view",
+      name: "view-product",
+      component: AdminShowProductView,
     },
     {
       path: "/admin/products/create",
       name: "create-product",
-      component: DashboardView,
+      component: CreateProduct,
+    },
+    {
+      path: "/admin/products/:slug/edit",
+      name: "edit-product",
+      component: EditProduct,
     },
     {
       path: "/admin/products/categories",
       name: "categories",
-      component: DashboardView,
+      component: CategoriesView,
     },
     {
       path: "/admin/orders",
