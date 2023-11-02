@@ -44,7 +44,6 @@ window.addEventListener("resize", () => {
     localStorage.setItem("is_expanded", "false");
   }
 });
-
 </script>
 
 <template>
@@ -66,7 +65,7 @@ window.addEventListener("resize", () => {
         <Header />
       </div>
       <div class="mt-3">
-        <div class="admin-container">
+        <div class="admin-container animated-zoomIn">
           <slot />
         </div>
       </div>
@@ -86,5 +85,10 @@ window.addEventListener("resize", () => {
       }
     }
   }
+}
+.animated-zoomIn {
+  animation: zoomIn;
+  // animation: fadeIn;
+  animation-duration: 400ms;
 }
 </style>

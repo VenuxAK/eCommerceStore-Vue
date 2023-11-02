@@ -1,20 +1,33 @@
 <script setup>
-import { RouterLink } from "vue-router";
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import ShoppingCart from "../components/shop/ShoppingCart.vue";
 import SearchBox from "../components/modals/SearchBox.vue";
 import MobileNavbar from "./MobileNavbar.vue";
-import { ref } from "vue";
-
 import {
   UserIcon,
   Bars3BottomRightIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/vue/20/solid";
 import { HeartIcon, ShoppingBagIcon } from "@heroicons/vue/24/outline";
+import auth from "../stores/auth/auth";
 
+const { onAuthState, logout } = auth();
+let user = ref(null);
 let open = ref(false);
+const router = useRouter();
 let openMobileNavbar = ref(false);
 const isOpenSearchBox = ref(false);
+const signout = async () => {
+  if (confirm("Are you sure want to sign out?")) {
+    await logout();
+    router.push("/");
+  }
+};
+
+onMounted(async () => {
+  user.value = await onAuthState();
+});
 </script>
 
 <template>
@@ -65,6 +78,24 @@ const isOpenSearchBox = ref(false);
             >Contact</RouterLink
           >
         </li>
+        <li>
+          <button @click="signout" v-if="user" class="nav-btn">Sign out</button>
+          <RouterLink
+            v-if="!user"
+            to="/signin"
+            class="nav-link"
+            :class="{ active: $route.name == 'contact' }"
+            >Sign in</RouterLink
+          >
+        </li>
+        <li v-if="user && user.role === 'admin'">
+          <RouterLink
+            to="/admin"
+            class="nav-link"
+            :class="{ active: $route.name == 'dashboard' }"
+            >Dashboard</RouterLink
+          >
+        </li>
       </ul>
     </div>
     <ul class="flex space-x-4">
@@ -102,6 +133,7 @@ const isOpenSearchBox = ref(false);
   </nav>
   <MobileNavbar
     :is-open="openMobileNavbar"
+    :user="user"
     @closeModal="openMobileNavbar = false"
   />
   <ShoppingCart :open="open" @close="open = false" />
@@ -126,6 +158,9 @@ const isOpenSearchBox = ref(false);
   &.active {
     @apply text-gray-900 border-b-2 border-b-primary;
   }
+}
+.nav-btn {
+  @apply text-gray-700 text-sm font-medium text-center overflow-hidden focus:z-10 dark:bg-gray-800 dark:text-gray-300 hover:text-gray-900 transition-all;
 }
 .nav-icon {
   @apply relative text-lg text-gray-700 hover:text-gray-900 hover:scale-125 transition-all;

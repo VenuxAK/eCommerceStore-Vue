@@ -67,6 +67,23 @@
                     Contact
                   </button>
                 </div>
+                <div>
+                  <button v-if="user" class="route-btn" @click="onSignout">
+                    Sign out
+                  </button>
+                  <button
+                    v-else
+                    class="route-btn"
+                    @click="changeRoute('signin')"
+                  >
+                    Sign In
+                  </button>
+                </div>
+                <div v-if="user && user.role === 'admin'">
+                  <button class="route-btn" @click="changeRoute('admin')">
+                    Dashboard
+                  </button>
+                </div>
               </div>
             </DialogPanel>
           </TransitionChild>
@@ -86,9 +103,10 @@ import {
   DialogTitle,
 } from "@headlessui/vue";
 import { useRouter } from "vue-router";
+import auth from "../stores/auth/auth";
 
 // const isOpen = ref(true);
-const props = defineProps(["isOpen"]);
+const props = defineProps(["isOpen", "user"]);
 const emit = defineEmits(["closeModal", "openModal"]);
 
 function closeModal() {
@@ -103,6 +121,15 @@ const router = useRouter();
 const changeRoute = (route) => {
   emit("closeModal");
   router.push(`${route}`);
+};
+
+const { logout } = auth();
+const onSignout = async () => {
+  emit("closeModal");
+  if (confirm("Are you sure want to sign out?")) {
+    await logout();
+    router.push("/");
+  }
 };
 </script>
 
