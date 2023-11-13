@@ -82,6 +82,7 @@ const router = createRouter({
               path: ":slug/view",
               name: "view-product",
               component: AdminShowProductView,
+              props: true,
             },
             {
               path: "create",
@@ -92,6 +93,7 @@ const router = createRouter({
               path: ":slug/edit",
               name: "edit-product",
               component: EditProduct,
+              props: true,
             },
             {
               path: "categories",

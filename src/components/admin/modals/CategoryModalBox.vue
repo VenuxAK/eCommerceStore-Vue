@@ -42,28 +42,7 @@ const close = () => {
         </div>
       </div>
       <div class="p-3">
-        <form>
-          <div class="mb-6">
-            <label for="name" class="form-label" style="color: white">{{
-              !for_use || for_use === "category"
-                ? "Category name"
-                : "Sub-category name"
-            }}</label>
-            <input type="text" id="name" class="form-input" />
-            <!-- style="color: #333" -->
-          </div>
-          <div class="mb-6" v-if="!for_use || for_use === 'category'">
-            <label class="form-label" style="color: white" for="file_input"
-              >Upload file</label
-            >
-            <input class="file-input" id="file_input" type="file" />
-          </div>
-          <div class="mb-4">
-            <button class="btn-create w-full">
-              {{ !for_use || for_use === "category" ? "Submit" : "Add" }}
-            </button>
-          </div>
-        </form>
+        <slot />
       </div>
     </div>
   </div>

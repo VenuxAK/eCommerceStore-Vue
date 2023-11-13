@@ -3,6 +3,17 @@ import AdminLayout from "../../../layouts/AdminLayout.vue";
 import Product from "../../../components/admin/products/Product.vue";
 import Pagination from "../../../components/paginations/Pagination.vue";
 import { RouterLink } from "vue-router";
+import { useStore } from "../../../stores/eCommerce/products/useStore";
+import { onMounted, ref } from "vue";
+
+const { getProducts } = useStore();
+let products = ref([]);
+
+onMounted(async () => {
+  const response = await getProducts();
+  products.value = response.products;
+  // console.log(products.value);
+});
 </script>
 
 <template>
@@ -62,11 +73,15 @@ import { RouterLink } from "vue-router";
         </div>
         <div class="p-3 md:p-6">
           <div
+            v-if="products.length > 0"
             class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3"
           >
-            <Product v-for="product in 10" :product="product" />
+            <Product v-for="product in products" :product="product" />
           </div>
-          <div class="mt-5">
+          <div v-else class="text-center py-20">
+            <h2>No Products!</h2>
+          </div>
+          <div v-if="products.length > 0" class="mt-5">
             <Pagination />
           </div>
         </div>

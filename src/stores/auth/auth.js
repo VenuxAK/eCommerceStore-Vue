@@ -53,6 +53,7 @@ const auth = () => {
   };
 
   return {
+    getToken,
     onAuthState,
     logout,
   };

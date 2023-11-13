@@ -1,17 +1,38 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useStore } from "../../../stores/eCommerce/products/useStore";
+import { makeStore } from "../../../stores/eCommerce/products/makeStore";
 
-const route = useRoute();
+const router = useRouter();
+const props = defineProps(["slug"]);
 
-const product = ref({ slug: route.params.slug });
+const product = ref(null);
+const { getProduct } = useStore();
+
+const { deleteProduct } = makeStore();
+
+const onDelete = async (slug) => {
+  if (confirm("Are you sure want to delete?")) {
+    const response = await deleteProduct(slug);
+    if (response.status === 204) {
+      router.push("/admin/products");
+    }
+  }
+};
+
+onMounted(async () => {
+  const response = await getProduct(props.slug);
+  product.value = response.product;
+  // console.log(product.value);
+});
 </script>
 <template>
   <AdminLayout>
-    <section>
+    <section v-if="product">
       <div class="mb-6 mt-3">
-        <h1 class="adm-title">View product</h1>
+        <!-- <h1 class="adm-title">{{ product.name }}</h1> -->
       </div>
       <div class="bg-gray-100 dark:bg-gray-800 py-8">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -37,6 +58,7 @@ const product = ref({ slug: route.params.slug });
                 </div>
                 <div class="w-1/2 px-2">
                   <button
+                    @click="onDelete(product.slug)"
                     class="w-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white py-2 px-4 rounded-full font-bold hover:bg-gray-300 dark:hover:bg-gray-600"
                   >
                     Delete
@@ -46,19 +68,19 @@ const product = ref({ slug: route.params.slug });
             </div>
             <div class="md:flex-1 px-4">
               <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-                Product Name
+                {{ product.name }}
               </h2>
               <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed
-                ante justo. Integer euismod libero id mauris malesuada
-                tincidunt.
+                {{ product.description }}
               </p>
               <div class="flex mb-4">
                 <div class="mr-4">
                   <span class="font-bold text-gray-700 dark:text-gray-300"
                     >Price:</span
                   >
-                  <span class="text-gray-600 dark:text-gray-300">$29.99</span>
+                  <span class="text-gray-600 dark:text-gray-300">
+                    ${{ product.price }}
+                  </span>
                 </div>
                 <div>
                   <span class="font-bold text-gray-700 dark:text-gray-300"
@@ -123,14 +145,7 @@ const product = ref({ slug: route.params.slug });
                   >Product Description:</span
                 >
                 <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  sed ante justo. Integer euismod libero id mauris malesuada
-                  tincidunt. Vivamus commodo nulla ut lorem rhoncus aliquet.
-                  Duis dapibus augue vel ipsum pretium, et venenatis sem
-                  blandit. Quisque ut erat vitae nisi ultrices placerat non eget
-                  velit. Integer ornare mi sed ipsum lacinia, non sagittis
-                  mauris blandit. Morbi fermentum libero vel nisl suscipit, nec
-                  tincidunt mi consectetur.
+                  {{ product.description }}
                 </p>
               </div>
             </div>
