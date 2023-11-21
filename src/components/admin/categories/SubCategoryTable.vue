@@ -70,7 +70,7 @@ onMounted(async () => {
 
 <template>
   <!-- Sub category -->
-  <div class="mb-8">
+  <div class="mb-8" v-if="sub_categories.length > 0">
     <div class="w-full">
       <div class="flex justify-between items-center mb-4">
         <h1 class="text-xl text-gray-700 dark:text-gray-200 font-medium">
@@ -133,6 +133,18 @@ onMounted(async () => {
     </div>
     <div class="mt-4 mb-6">
       <Pagination />
+    </div>
+  </div>
+  <div v-else>
+    <div class="flex flex-col items-center justify-center py-16  space-y-3 border-t border-gray-200 dark:border-gray-800">
+      <h1 class="text-gray-600 dark:text-gray-500 text-xl font-medium">
+        No Sub-categories were created yet
+      </h1>
+      <div>
+        <button class="btn-create" @click="handleAddModal">
+          Create New Sub Category
+        </button>
+      </div>
     </div>
   </div>
 

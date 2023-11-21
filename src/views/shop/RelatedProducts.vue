@@ -1,5 +1,7 @@
 <script setup>
 import Product from "../../components/products/Product.vue";
+
+const props = defineProps(["products"]);
 </script>
 
 <template>
@@ -8,7 +10,7 @@ import Product from "../../components/products/Product.vue";
       <h1 class="title mb-4">Related Products</h1>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div v-for="product in 4" :key="product">
+      <div v-for="product in products" :key="product.id">
         <Product :product="product" />
       </div>
     </div>

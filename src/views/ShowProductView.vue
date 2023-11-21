@@ -1,21 +1,62 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import Layout from "../layouts/Layout.vue";
 import RelatedProducts from "./shop/RelatedProducts.vue";
+import Spinner from "../components/spinners/Spinner.vue";
+import NotFoundProduct from "../components/errors/NotFoundProduct.vue";
 import { Carousel, Slide } from "vue3-carousel";
 import "vue3-carousel/dist/carousel.css";
 import { HeartIcon, ShoppingBagIcon } from "@heroicons/vue/20/solid";
+import { useStore } from "../stores/eCommerce/products/useStore";
+import { useRouter } from "vue-router";
 
+const props = defineProps(["slug"]);
+const router = useRouter();
+const { getProduct, getProducts } = useStore();
+let product = ref(null);
+let related_products = ref([]);
 let currentSlide = ref(0);
+let load = ref(false);
+let notFound = ref(false);
 
 const slideTo = (val) => {
   currentSlide.value = val;
 };
+
+const fetchRelatedProducts = async () => {
+  const response = await getProducts(
+    `related=${product.value.product_type_id}`
+  );
+  related_products.value = response.products;
+  // console.log("Related products", response);
+};
+
+const fetchProduct = async () => {
+  load.value = true;
+  const response = await getProduct(props.slug);
+  if (response.status_code === 404) {
+    notFound.value = true;
+    load.value = false;
+    return;
+  }
+  notFound.value = false;
+  load.value = false;
+  product.value = response.product;
+  console.log(product.value);
+  if (product.value) {
+    await fetchRelatedProducts();
+  }
+  // console.log(response);
+};
+
+onMounted(async () => {
+  await fetchProduct();
+});
 </script>
 
 <template>
   <Layout>
-    <section>
+    <section v-if="product">
       <div class="w-full flex flex-col md:flex-row md:space-x-8">
         <div class="md:w-[45%]">
           <Carousel
@@ -24,14 +65,10 @@ const slideTo = (val) => {
             :wrap-around="false"
             v-model="currentSlide"
           >
-            <Slide v-for="src in 4" :key="src">
+            <Slide v-for="image in product.images" :key="image">
               <div class="carousel__item mb-4 overflow-hidden">
                 <div>
-                  <img
-                    :src="`/images/product/product${src}.jpg`"
-                    class="object-cover"
-                    alt=""
-                  />
+                  <img :src="image" class="object-cover" alt="" />
                 </div>
               </div>
             </Slide>
@@ -44,14 +81,10 @@ const slideTo = (val) => {
             v-model="currentSlide"
             ref="carousel"
           >
-            <Slide v-for="src in 4" :key="src">
-              <div class="carousel__item p-1" @click="slideTo(src - 1)">
+            <Slide v-for="(image, index) in product.images" :key="image">
+              <div class="carousel__item p-1" @click="slideTo(index + 1 - 1)">
                 <div>
-                  <img
-                    :src="`/images/product/product${src}.jpg`"
-                    class="cursor-pointer"
-                    alt=""
-                  />
+                  <img :src="image" class="cursor-pointer" alt="" />
                 </div>
               </div>
             </Slide>
@@ -59,7 +92,7 @@ const slideTo = (val) => {
         </div>
         <div class="md:w-[55%]">
           <div>
-            <h3 class="title mb-4">Product Name</h3>
+            <h3 class="title mb-4">{{ product.name }}</h3>
             <div class="flex flex-col space-y-3">
               <div>
                 <h3 class="text-secondary font-medium text-lg">
@@ -76,21 +109,20 @@ const slideTo = (val) => {
               <div>
                 <h3 class="text-secondary font-medium text-lg">
                   Category:
-                  <span class="pl-2 font-light">Sofa</span>
+                  <span class="pl-2 font-light">{{ product.product_type }}</span>
                 </h3>
               </div>
               <div>
                 <h3 class="text-secondary font-medium text-lg">
                   Price:
-                  <span class="pl-2 text-primary font-bold">$300</span>
+                  <span class="pl-2 text-primary font-bold"
+                    >${{ product.price }}</span
+                  >
                 </h3>
               </div>
               <div>
                 <p class="text-secondary/80">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque
-                  ipsum voluptatibus atque, eum esse nemo! Odio vero porro alias
-                  corrupti! Porro maiores beatae, ea hic iste nisi dolor
-                  reiciendis odio!
+                  {{ product.description }}
                 </p>
               </div>
               <div>
@@ -104,11 +136,13 @@ const slideTo = (val) => {
                     id="default"
                     class="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
-                    <option value="1" selected>1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+                    <option
+                      v-for="count in product.stock_quantity"
+                      :key="count"
+                      :value="count"
+                    >
+                      {{ count }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -143,8 +177,14 @@ const slideTo = (val) => {
           </div>
         </div>
       </div>
+      <RelatedProducts :products="related_products" />
     </section>
-    <RelatedProducts />
+    <section v-else>
+      <div v-if="load" class="h-[50vh] flex justify-center items-center">
+        <Spinner />
+      </div>
+      <NotFoundProduct v-if="notFound" />
+    </section>
   </Layout>
 </template>
 

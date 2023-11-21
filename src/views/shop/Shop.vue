@@ -13,7 +13,7 @@
   ```
 -->
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import {
   Dialog,
   DialogPanel,
@@ -35,22 +35,24 @@ import {
   PlusIcon,
   Squares2X2Icon,
 } from "@heroicons/vue/20/solid";
+import { useStore } from "../../stores/eCommerce/products/useStore";
+import { useCategory } from "../../stores/eCommerce/categories/useCategory";
+import { useRoute, useRouter } from "vue-router";
 
+const { getProducts, raw } = useStore();
+const { getCategories, getSubCategories, getCategoryProducts } = useCategory();
+const route = useRoute();
+const router = useRouter();
+const subCategories = ref([]);
+let products = ref([]);
+let routeParamChange = ref(router.currentRoute.value.query);
 const sortOptions = [
-  { name: "Most Popular", href: "#", current: true },
-  { name: "Best Rating", href: "#", current: false },
-  { name: "Newest", href: "#", current: false },
-  { name: "Price: Low to High", href: "#", current: false },
-  { name: "Price: High to Low", href: "#", current: false },
+  { name: "Up to Date", href: "#", current: true },
+  // { name: "Best Rating", href: "#", current: false },
+  { name: "Price: Low to High", href: "?price=low", current: false },
+  { name: "Price: High to Low", href: "?price=high", current: false },
 ];
-const subCategories = [
-  { name: "Totes", href: "#" },
-  { name: "Backpacks", href: "#" },
-  { name: "Travel Bags", href: "#" },
-  { name: "Hip Bags", href: "#" },
-  { name: "Laptop Sleeves", href: "#" },
-];
-const filters = [
+const filters = ref([
   {
     id: "color",
     name: "Color",
@@ -61,17 +63,6 @@ const filters = [
       { value: "brown", label: "Brown", checked: false },
       { value: "green", label: "Green", checked: false },
       { value: "purple", label: "Purple", checked: false },
-    ],
-  },
-  {
-    id: "category",
-    name: "Category",
-    options: [
-      { value: "new-arrivals", label: "New Arrivals", checked: false },
-      { value: "sale", label: "Sale", checked: false },
-      { value: "travel", label: "Travel", checked: true },
-      { value: "organization", label: "Organization", checked: false },
-      { value: "accessories", label: "Accessories", checked: false },
     ],
   },
   {
@@ -86,9 +77,79 @@ const filters = [
       { value: "40l", label: "40L", checked: true },
     ],
   },
-];
+]);
 
 const mobileFiltersOpen = ref(false);
+
+const fetchProducts = async (query = "") => {
+  const response_products = await getProducts(query);
+  products.value = response_products.products;
+};
+const fetchSubCategoryProducts = async (query) => {
+  const response = await raw(`/api/v1/products/types/${query}`);
+  products.value = response.type.products;
+};
+const fetchCategoryProducts = async (slug) => {
+  const response = await getCategoryProducts(slug);
+  // const data = response.category.types;
+  const response_product_types = response.category.types.filter((product) => {
+    return product.products.length > 0;
+  });
+  products.value = response_product_types.flatMap(
+    (_category) => _category.products
+  );
+};
+
+onMounted(async () => {
+  await fetchProducts();
+  if (route.query.sub_category) {
+    await fetchSubCategoryProducts(route.query.sub_category);
+  } else if (route.query.category) {
+    await fetchCategoryProducts(route.query.category);
+  }
+  const response_categories = await getCategories();
+  filters.value.unshift({
+    id: "main_category",
+    name: "Main Category",
+    options: response_categories.categories.map((option) => {
+      return {
+        value: option.slug,
+        label: option.name,
+        checked: false,
+      };
+    }),
+  });
+
+  const response = await getSubCategories();
+  subCategories.value = response.product_types.filter((sub) => {
+    return sub.products.length > 0;
+  });
+});
+
+watch(
+  () => router.currentRoute.value.query,
+  async (toQuery, fromQuery) => {
+    // console.log("Route parameters changes:", toQuery, fromQuery);
+    let query = toQuery;
+    routeParamChange.value = query;
+
+    if (query.sub_category) {
+      await fetchSubCategoryProducts(query.sub_category);
+    } else if (query.price) {
+      if (query.price === "low") {
+        await fetchProducts("?price=low");
+      } else if (query.price === "high") {
+        await fetchProducts("?price=high");
+      }
+    } else if (query.category) {
+      console.log(query);
+      // const response = await raw(`/api/v1/categories/${query.category}`);
+      // console.log(response);
+    } else {
+      await fetchProducts();
+    }
+  }
+);
 </script>
 
 <template>
@@ -140,14 +201,27 @@ const mobileFiltersOpen = ref(false);
 
                 <!-- Filters -->
                 <form class="mt-4 border-t border-gray-200">
-                  <h3 class="sr-only">Categories</h3>
-                  <ul role="list" class="px-2 py-3 font-medium text-gray-900">
-                    <li v-for="category in subCategories" :key="category.name">
-                      <a :href="category.href" class="block px-2 py-3">{{
-                        category.name
-                      }}</a>
-                    </li>
-                  </ul>
+                  <div class="p-4">
+                    <h3 class="text-gray-800 text-xl font-medium mb-2">
+                      Categories
+                    </h3>
+                    <ul
+                      v-if="subCategories.length > 0"
+                      role="list"
+                      class="px-2 py-3 font-medium text-gray-900"
+                    >
+                      <li
+                        v-for="category in subCategories"
+                        :key="category.name"
+                      >
+                        <RouterLink
+                          @click="mobileFiltersOpen = false"
+                          :to="`/shop?sub_category=${category.slug}`"
+                          >{{ category.type }}</RouterLink
+                        >
+                      </li>
+                    </ul>
+                  </div>
 
                   <Disclosure
                     as="div"
@@ -207,12 +281,17 @@ const mobileFiltersOpen = ref(false);
           </div>
         </Dialog>
       </TransitionRoot>
+      <!-- End mobile filter dialog -->
 
       <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
           class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-4"
         >
-          <h1 class="text-4xl font-bold tracking-tight text-gray-900">Shop</h1>
+          <RouterLink
+            to="/shop"
+            class="text-4xl font-bold tracking-tight text-gray-900"
+            >Shop</RouterLink
+          >
 
           <div class="flex items-center">
             <Menu as="div" class="relative inline-block text-left">
@@ -245,8 +324,8 @@ const mobileFiltersOpen = ref(false);
                       :key="option.name"
                       v-slot="{ active }"
                     >
-                      <a
-                        :href="option.href"
+                      <RouterLink
+                        :to="option.href"
                         :class="[
                           option.current
                             ? 'font-medium text-gray-900'
@@ -254,7 +333,7 @@ const mobileFiltersOpen = ref(false);
                           active ? 'bg-gray-100' : '',
                           'block px-4 py-2 text-sm',
                         ]"
-                        >{{ option.name }}</a
+                        >{{ option.name }}</RouterLink
                       >
                     </MenuItem>
                   </div>
@@ -286,13 +365,16 @@ const mobileFiltersOpen = ref(false);
           <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
             <!-- Filters -->
             <form class="hidden lg:block">
-              <h3 class="sr-only">Categories</h3>
+              <h3 class="text-gray-800 text-xl font-medium mb-5">Categories</h3>
               <ul
                 role="list"
                 class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
+                v-if="subCategories.length > 0"
               >
                 <li v-for="category in subCategories" :key="category.name">
-                  <a :href="category.href">{{ category.name }}</a>
+                  <RouterLink :to="`/shop?sub_category=${category.slug}`">{{
+                    category.type
+                  }}</RouterLink>
                 </li>
               </ul>
 
@@ -347,8 +429,8 @@ const mobileFiltersOpen = ref(false);
             </form>
 
             <!-- Product grid -->
-            <div class="lg:col-span-3">
-              <slot />
+            <div :key="routeParamChange" class="lg:col-span-3">
+              <slot :products="products" />
             </div>
           </div>
         </section>

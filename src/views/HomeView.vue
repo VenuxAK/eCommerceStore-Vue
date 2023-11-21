@@ -3,6 +3,28 @@ import Features from "../components/Features.vue";
 import Layout from "../layouts/Layout.vue";
 import RecommandedProducts from "./home/RecommandedProducts.vue";
 import TopNewArrival from "./home/TopNewArrival.vue";
+import { useStore } from "../stores/eCommerce/products/useStore";
+import { useCategory } from "../stores/eCommerce/categories/useCategory";
+
+import { onMounted, ref } from "vue";
+const { getCategories } = useCategory();
+const { getProducts } = useStore();
+
+let categories = ref([]);
+let recommanded_products = ref([]);
+let top_new_arrival_products = ref([]);
+
+onMounted(async () => {
+  const response_recommanded_products = await getProducts("latest=10");
+  recommanded_products.value = response_recommanded_products.products;
+
+  const response_latest_products = await getProducts("recommanded=10");
+  top_new_arrival_products.value = response_latest_products.products;
+  // console.log(response_latest_products);
+
+  const response_categories = await getCategories();
+  categories.value = response_categories.categories;
+});
 </script>
 
 <template>
@@ -13,31 +35,25 @@ import TopNewArrival from "./home/TopNewArrival.vue";
     <section class="container">
       <h1 class="title">Shop By Category</h1>
       <div class="grid grid-cols-3 gap-1 my-5">
-        <div v-for="i in 6" :key="i">
+        <div v-for="category in categories" :key="category">
           <div class="relative object-cover overflow-hidden cursor-pointer">
-            <RouterLink to="#">
+            <RouterLink :to="`/shop?category=${category.slug}`">
               <img
-                :src="`/images/category/category-${i}.jpg`"
+                :src="category.thumbnail"
                 alt=""
-                class=""
+                class="w-full h-full aspect-square object-cover"
               />
-              <h1 class="category-name">Name</h1>
+              <h1 class="category-name">{{ category.name }}</h1>
             </RouterLink>
           </div>
         </div>
       </div>
     </section>
-    <TopNewArrival />
-    <!-- <section class="container mb-8">
-      <div class="border shadow-lg">
-        <img
-          src="/images/banner/ecommerce-banner-4.jpg"
-          alt=""
-          class="w-full h-full object-fill"
-        />
-      </div>
-    </section> -->
-    <RecommandedProducts />
+
+    <TopNewArrival :products="top_new_arrival_products" />
+
+    <RecommandedProducts :products="recommanded_products" />
+
     <section class="my-12">
       <div>
         <RouterLink

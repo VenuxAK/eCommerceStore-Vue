@@ -68,7 +68,7 @@ onMounted(async () => {
 
 <template>
   <!-- Category  -->
-  <div class="mb-8">
+  <div class="mb-8" v-if="categories.length > 0">
     <div class="w-full mb-4 flex justify-end">
       <button class="btn-create" @click="handleCreateCategoryModal">
         Create
@@ -128,6 +128,18 @@ onMounted(async () => {
     </div>
     <div class="mt-4 mb-6" v-if="categories.length > 0">
       <Pagination />
+    </div>
+  </div>
+  <div v-else>
+    <div class="flex flex-col items-center justify-center my-16 space-y-3">
+      <h1 class="text-gray-600 dark:text-gray-500 text-xl font-medium">
+        No Categories were created yet
+      </h1>
+      <div>
+        <button class="btn-create" @click="handleCreateCategoryModal">
+          Create New Category
+        </button>
+      </div>
     </div>
   </div>
   <!-- Create Category -->

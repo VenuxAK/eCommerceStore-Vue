@@ -2,11 +2,14 @@
 import { Carousel, Navigation, Slide } from "vue3-carousel";
 import "vue3-carousel/dist/carousel.css";
 import Product from "../../components/products/Product.vue";
+
+const props = defineProps(["products"]);
+
 const settings = {
   itemsToShow: 1,
   snapAlign: "center",
   wrapAround: true,
-    autoplay: 3000,
+  autoplay: 3000,
 };
 
 const breakpoints = {
@@ -26,9 +29,9 @@ const breakpoints = {
 <template>
   <section class="container my-12">
     <h1 class="title">Top New Arrival</h1>
-    <div class="my-5">
+    <div class="my-5" v-if="products">
       <Carousel v-bind="settings" :breakpoints="breakpoints">
-        <Slide v-for="product in 10" :key="product">
+        <Slide v-for="product in products" :key="product.id">
           <Product :product="product" class="carousel__item mx-3" />
         </Slide>
 

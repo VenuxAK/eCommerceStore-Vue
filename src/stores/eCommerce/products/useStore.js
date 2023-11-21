@@ -4,9 +4,19 @@ import { ref } from "vue";
 export const useStore = defineStore("useStore", () => {
   let products = ref([]);
 
-  const getProducts = async () => {
+  const raw = async (uri) => {
     try {
-      const response = await axios.get("/api/v1/products");
+      const response = await axios.get(uri);
+      return response.data;
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  };
+
+  const getProducts = async (query = "") => {
+    try {
+      const response = await axios.get(`/api/v1/products?${query}`);
       //   console.log(response.data);
       return response.data;
     } catch (err) {
@@ -19,7 +29,8 @@ export const useStore = defineStore("useStore", () => {
       const response = await axios.get(`/api/v1/products/${slug}`);
       return response.data;
     } catch (err) {
-      console.log(err);
+      // console.log(err.response.data);
+      return err.response.data || err;
     }
   };
 
@@ -27,5 +38,6 @@ export const useStore = defineStore("useStore", () => {
     products,
     getProducts,
     getProduct,
+    raw,
   };
 });

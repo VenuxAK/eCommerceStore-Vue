@@ -11,6 +11,7 @@ import { default as AdminShowProductView } from "../views/admin/products/ShowPro
 import CreateProduct from "../views/admin/products/CreateProductView.vue";
 import EditProduct from "../views/admin/products/EditProductView.vue";
 import CategoriesView from "../views/admin/categories/CategoriesView.vue";
+import NotFound from "../views/error/NotFound.vue";
 import auth from "../stores/auth/auth";
 
 const { onAuthState } = auth();
@@ -48,6 +49,7 @@ const router = createRouter({
       path: "/shop/products/:slug",
       name: "show-product",
       component: ShowProductView,
+      props: true,
     },
     {
       path: "/shopping-bag",
@@ -165,6 +167,11 @@ const router = createRouter({
       path: "/privacy-policy",
       name: "privacy-policy",
       component: () => import("../views/PrivacyAndPolicy.vue"),
+    },
+    {
+      path: "/:patchMatch(.*)*",
+      name: "not-found",
+      component: NotFound,
     },
   ],
   scrollBehavior(to, from, savedPosition) {

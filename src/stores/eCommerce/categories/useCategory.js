@@ -29,7 +29,17 @@ export const useCategory = defineStore("useCategory", () => {
   const getSubCategories = async () => {
     try {
       const response = await axios.get("/api/v1/products/types/all");
-    //   console.log(response.data);
+      //   console.log(response.data);
+      return response.data;
+    } catch (err) {
+      console.log(err.response);
+      return err.response;
+    }
+  };
+  const getCategoryProducts = async (slug) => {
+    try {
+      const response = await axios.get("/api/v1/categories/" + slug);
+      //   console.log(response.data);
       return response.data;
     } catch (err) {
       console.log(err.response);
@@ -43,5 +53,6 @@ export const useCategory = defineStore("useCategory", () => {
     getCategories,
     getCategory,
     getSubCategories,
+    getCategoryProducts,
   };
 });
