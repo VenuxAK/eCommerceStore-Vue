@@ -12,9 +12,15 @@ import CreateProduct from "../views/admin/products/CreateProductView.vue";
 import EditProduct from "../views/admin/products/EditProductView.vue";
 import CategoriesView from "../views/admin/categories/CategoriesView.vue";
 import NotFound from "../views/error/NotFound.vue";
-import auth from "../stores/auth/auth";
+import pinia from "../libs/pinia";
+import { useAuth } from "../stores/auth/useAuth";
 
-const { onAuthState } = auth();
+const store = useAuth(pinia);
+const { onAuthState } = store;
+let user = null;
+onAuthState().then((_user) => {
+  user = _user;
+});
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -181,7 +187,6 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  let user = await onAuthState();
   if (to.meta.guest) {
     if (!user) {
       next();

@@ -4,7 +4,7 @@ import Banner from "../views/home/Banner.vue";
 </script>
 
 <template>
-  <header class="overflow-hidden">
+  <header class="">
     <Navbar />
     <Banner v-if="$route.name == 'home'" />
   </header>

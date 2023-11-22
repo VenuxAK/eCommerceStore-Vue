@@ -4,12 +4,15 @@ import Layout from "../../layouts/Layout.vue";
 import { makeAuth } from "../../stores/auth/makeAuth";
 import ErrorMessage from "../../components/form/ErrorMessage.vue";
 import { useRouter } from "vue-router";
+import { useAuth } from "../../stores/auth/useAuth";
 
 let credentials = ref({
   email: "",
   password: "",
 });
 const { login } = makeAuth();
+const store = useAuth();
+const { onAuthState } = store;
 const router = useRouter();
 let errors = ref([]);
 const onSignin = async () => {
@@ -20,7 +23,9 @@ const onSignin = async () => {
     return;
   }
   errors.value = [];
-  router.push("/");
+  onAuthState().then(() => {
+    router.push("/");
+  });
 };
 </script>
 

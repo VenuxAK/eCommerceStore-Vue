@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue";
 import Layout from "../../layouts/Layout.vue";
 import { makeAuth } from "../../stores/auth/makeAuth";
+import { useAuth } from "../../stores/auth/useAuth";
 import ErrorMessage from "../../components/form/ErrorMessage.vue";
 import { useRouter } from "vue-router";
 
@@ -16,6 +17,9 @@ let credentials = ref({
 const router = useRouter();
 let errors = ref([]);
 const { register } = makeAuth();
+const store = useAuth();
+const { onAuthState } = store;
+
 const signup = async () => {
   let response = await register(credentials.value);
   if (response.errors) {
@@ -23,7 +27,9 @@ const signup = async () => {
     return;
   }
   errors.value = [];
-  router.push("/");
+  onAuthState().then(() => {
+    router.push("/");
+  });
   // console.log(response);
 };
 </script>
