@@ -1,3 +1,57 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply bg-white dark:bg-gray-950 text-gray-800 dark:text-gray-400;
+}
+.admin-container {
+  @apply w-[95%] mx-auto;
+}
+
+.form-label {
+  @apply text-gray-800 dark:text-gray-300 block mb-2 text-sm;
+}
+.form-input {
+  @apply block w-full text-sm text-gray-700 dark:text-white bg-gray-100 dark:bg-gray-700 rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:placeholder-gray-400;
+}
+.file-input {
+  @apply block w-full text-sm text-gray-800 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400;
+}
+.btn-edit {
+  @apply bg-transparent font-bold px-3 py-2 border border-gray-200 dark:border-gray-600 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-all focus:outline-none;
+}
+.btn-delete {
+  @apply bg-danger font-bold text-white px-3 py-2 border border-transparent rounded hover:bg-danger/70 dark:hover:bg-danger/80 transition-all focus:outline-none;
+}
+.btn-create {
+  @apply bg-primary text-white px-3 py-2 rounded inline-flex items-center space-x-2 hover:bg-primary/90 dark:hover:bg-primary/80 transition-all focus:outline-none;
+}
+
+.btn-primary-outline {
+  @apply bg-primary px-3 py-1 text-white rounded hover:bg-white hover:text-primary font-medium transition-all border-2 border-transparent hover:border-primary;
+}
+.btn-secondary-outline {
+  @apply bg-secondary px-3 py-1 text-white rounded hover:bg-white hover:text-secondary font-medium transition-all border-2 border-transparent hover:border-secondary;
+}
+.btn-danger-outline {
+  @apply bg-danger px-3 py-1 text-white rounded hover:bg-white hover:text-danger font-medium transition-all border-2 border-transparent hover:border-danger;
+}
+.btn-info-outline {
+  @apply bg-info px-3 py-1 text-white rounded hover:bg-white hover:text-info font-medium transition-all border-2 border-transparent hover:border-info;
+}
+.btn-warning-outline {
+  @apply bg-warning px-3 py-1 text-white rounded hover:bg-white hover:text-warning font-medium transition-all border-2 border-transparent hover:border-warning;
+}
+.btn-dark-outline {
+  @apply bg-dark px-3 py-1 text-white rounded hover:bg-white hover:text-dark font-medium transition-all border-2 border-transparent hover:border-dark;
+}
+
+/* .btn- */
+
+.title {
+  @apply text-xl md:text-2xl text-secondary font-medium uppercase;
+}
+.sub-title {
+  @apply text-lg md:text-xl text-secondary font-medium uppercase;
+}
